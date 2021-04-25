@@ -7,11 +7,15 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import SettingsIcon from '@material-ui/icons/Settings';
-
+import { makeStyles } from '@material-ui/core/styles';
 
 
 import logo from './logo.svg';
@@ -23,24 +27,36 @@ function App() {
   return (
     <Router history={history}>
 
-      {/* sidebar */}
+      <AppBar position="static" style={{zIndex: 100}}>
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            
+          </IconButton>
+          <Typography variant="h6">
+            Add Event
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+      
       <Drawer
         variant="persistent"
         anchor="left"
         open={true}
       >
-        {/* <div>
-          <IconButton>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div> */}
+        
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon></ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem>
+            <ListItemIcon> <CalendarTodayIcon/> </ListItemIcon>
+          </ListItem>
+
+          <ListItem>
+            <ListItemIcon> <EventAvailableIcon/> </ListItemIcon>
+          </ListItem>
+
+          <ListItem>
+            <ListItemIcon> <SettingsIcon/> </ListItemIcon>
+          </ListItem>
         </List>
       </Drawer>
 
