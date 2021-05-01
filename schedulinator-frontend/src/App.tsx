@@ -29,9 +29,7 @@ function App() {
 
       <AppBar position="static" style={{zIndex: 100}}>
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            
-          </IconButton>
+          <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
           <Typography variant="h6">
             Add Event
           </Typography>
@@ -44,7 +42,6 @@ function App() {
         anchor="left"
         open={true}
       >
-        
         <List>
           <ListItem>
             <ListItemIcon> <CalendarTodayIcon/> </ListItemIcon>
@@ -61,12 +58,9 @@ function App() {
       </Drawer>
 
       <Switch>
-        <Route exact path="/">
+        <Route exact path="/"></Route>
 
-        </Route>
-        <Route path="/settings">
-          
-        </Route>
+        <Route path="/settings"></Route>
       </Switch>
     </Router>
   );
