@@ -1,25 +1,68 @@
 import React from 'react';
+import{ BrowserRouter, Router, Switch, Route, Link} from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { makeStyles } from '@material-ui/core/styles';
+
+
 import logo from './logo.svg';
 import './App.css';
 
+const history = createBrowserHistory();
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router history={history}>
+
+      <AppBar position="static" style={{zIndex: 100}}>
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
+          <Typography variant="h6">
+            Add Event
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+      
+      <Drawer
+        variant="persistent"
+        anchor="left"
+        open={true}
+      >
+        <List>
+          <ListItem>
+            <ListItemIcon> <CalendarTodayIcon/> </ListItemIcon>
+          </ListItem>
+
+          <ListItem>
+            <ListItemIcon> <EventAvailableIcon/> </ListItemIcon>
+          </ListItem>
+
+          <ListItem>
+            <ListItemIcon> <SettingsIcon/> </ListItemIcon>
+          </ListItem>
+        </List>
+      </Drawer>
+
+      <Switch>
+        <Route exact path="/"></Route>
+
+        <Route path="/settings"></Route>
+      </Switch>
+    </Router>
   );
 }
 
