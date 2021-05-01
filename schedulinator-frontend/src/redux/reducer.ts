@@ -26,14 +26,11 @@ const icsSlice = createSlice({
 
 // Wrapper function which builds thunk function used for async api call
 export function persistActiveIcs(ics: Object) {
-  return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction>, getState : any) {
-    var appState : RootState = getState();
-  
+  return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction>, getState : any) {  
     const response = await Post('/fakeApi/todos', ics);
     dispatch({ type: 'ics/icsPersisted', payload: response })
   }
 }
-
 
 export const { icsUpdate } = icsSlice.actions
 

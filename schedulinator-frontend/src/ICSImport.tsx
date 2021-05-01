@@ -21,6 +21,7 @@ export const ICSImport: FunctionComponent = () => {
 
         // Parsing file data into json and dispatching ics update
         var icsJson = parse(fileData.toString());
+        console.log(icsJson);
         dispatch(icsUpdate(icsJson));
       }
     });
