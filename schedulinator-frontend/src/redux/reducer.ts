@@ -1,7 +1,6 @@
 import { combineReducers, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "react"
 import { Post } from '../Client'
-import { RootState } from "./store"
 
 // ICS Slice
 export interface IcsState {

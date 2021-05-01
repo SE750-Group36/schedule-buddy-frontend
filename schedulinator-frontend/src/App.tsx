@@ -38,7 +38,6 @@ function App() {
   const persistIcsThunk = persistActiveIcs(ics);
   dispatch(persistIcsThunk);
 
-  console.log("rerender");
   return (
     <Router history={history}>
 
