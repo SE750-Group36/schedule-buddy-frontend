@@ -7,6 +7,8 @@ import { ThemeProvider } from '@material-ui/styles';
 import { useTheme } from '@material-ui/core';
 import { createBrowserHistory } from 'history';
 import { makeStyles } from '@material-ui/core/styles';
+import { ICSImport } from './ICSImport';
+import { useEffect, useState } from 'react';
 
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,10 +22,8 @@ import Button from '@material-ui/core/Button';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-
-
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 const { Component } = require('ical.js')
 
@@ -39,23 +39,39 @@ const selectActiveICS = (state : RootState) => {
 
 const history = createBrowserHistory();
 
-const dummyEvents = {
-  eventList: [
-    {
-      title: '701 Assignment',
-      start: '2021-05-10T10:30:00',
-      end: '2021-05-13T11:30:00'
-    }
-  ]
-};
-
 const sideBarStyles = {
   position: 'relative'
 } as React.CSSProperties;
 
+function getPropertyForEvent(event: Array<any>, property: String): String{
+  return event[1].filter((entry: any) => !entry[0].localeCompare(property))[0][3];
+}
+
 function App() {
   const dispatch = useDispatch()
   const ics = useSelector(selectActiveICS)
+  const [calendarData, setCalendarData] = useState<Array<any>>();
+
+  useEffect(() => {
+    if(ics){
+      // Remove the time zone entry from the event list
+      const events = ics.jCal[2].slice(1)
+      const eventList: Array<any>= []
+      
+      events.forEach((event: any) => {
+        // Get the required properties and convert to calendar format
+        const calEvent = { 
+          title: getPropertyForEvent(event, "summary"), 
+          start: getPropertyForEvent(event, "dtstart"), 
+          end: getPropertyForEvent(event, "dtend")
+        };
+  
+        eventList.push(calEvent)
+      });
+
+      setCalendarData(eventList);
+    }
+  }, [ics])
 
   const persistIcsThunk = persistActiveIcs(ics);
   dispatch(persistIcsThunk);
@@ -63,8 +79,6 @@ function App() {
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;
 
-
-  console.log(ics)
   return (
     <ThemeProvider theme={theme}>
       <Router history={history}>
@@ -76,6 +90,7 @@ function App() {
               Add Event
             </Typography>
             <Button color="inherit">Login</Button>
+            <ICSImport/>
           </Toolbar>
         </AppBar>
         
@@ -107,7 +122,7 @@ function App() {
               plugins={[ dayGridPlugin ]}
               initialView="dayGridMonth"
               weekends={true}
-              events={dummyEvents.eventList}
+              events={calendarData}
             />
           </Route>
 
