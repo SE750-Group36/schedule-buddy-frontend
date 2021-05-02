@@ -1,27 +1,36 @@
-import React from 'react';
-import{ BrowserRouter, Router, Switch, Route, Link} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import{ Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles } from '@material-ui/core/styles';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-
-
-import logo from './logo.svg';
 import './App.css';
+import { RootState } from './redux/store';
+import { persistActiveIcs } from './redux/reducer'
+
+const { Component } = require('ical.js')
+
+const selectActiveICS = (state : RootState) => {
+  if (state.icsSlice.activeIcs != null) {
+    var cal = new Component(state.icsSlice.activeIcs);
+
+    return cal;
+  }
+  
+  return null;
+}
 
 const history = createBrowserHistory();
 
@@ -36,6 +45,12 @@ const dummyEvents = {
 };
 
 function App() {
+  const dispatch = useDispatch()
+  const ics = useSelector(selectActiveICS)
+
+  const persistIcsThunk = persistActiveIcs(ics);
+  dispatch(persistIcsThunk);
+
   return (
     <Router history={history}>
 
