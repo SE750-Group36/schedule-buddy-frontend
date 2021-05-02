@@ -17,6 +17,9 @@ import Button from '@material-ui/core/Button';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { ThemeProvider } from '@material-ui/styles';
+import { useTheme } from '@material-ui/core';
+
 const { Component } = require('ical.js')
 
 const selectActiveICS = (state : RootState) => {
@@ -31,6 +34,10 @@ const selectActiveICS = (state : RootState) => {
 
 const history = createBrowserHistory();
 
+const sideBarStyles = {
+  position: 'relative'
+} as React.CSSProperties;
+
 function App() {
   const dispatch = useDispatch()
   const ics = useSelector(selectActiveICS)
@@ -38,45 +45,51 @@ function App() {
   const persistIcsThunk = persistActiveIcs(ics);
   dispatch(persistIcsThunk);
 
+  const theme = useTheme();
+  theme.zIndex.appBar = theme.zIndex.drawer + 50;
+
   return (
-    <Router history={history}>
+    <ThemeProvider theme={theme}>
+      <Router history={history}>
 
-      <AppBar position="static" style={{zIndex: 100}}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
-          <Typography variant="h6">
-            Add Event
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-      
-      <Drawer
-        variant="persistent"
-        anchor="left"
-        open={true}
-      >
-        <List>
-          <ListItem>
-            <ListItemIcon> <CalendarTodayIcon/> </ListItemIcon>
-          </ListItem>
+        <AppBar position="relative">
+          <Toolbar>
+            <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
+            <Typography variant="h6">
+              Add Event
+            </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+        
+        <Drawer
+          variant="persistent"
+          anchor="left"
+          open={true}
+          PaperProps={{style: sideBarStyles}}
+        >
+          <List>
+            <ListItem>
+              <ListItemIcon> <CalendarTodayIcon/> </ListItemIcon>
+            </ListItem>
 
-          <ListItem>
-            <ListItemIcon> <EventAvailableIcon/> </ListItemIcon>
-          </ListItem>
+            <ListItem>
+              <ListItemIcon> <EventAvailableIcon/> </ListItemIcon>
+            </ListItem>
 
-          <ListItem>
-            <ListItemIcon> <SettingsIcon/> </ListItemIcon>
-          </ListItem>
-        </List>
-      </Drawer>
+            <ListItem>
+              <ListItemIcon> <SettingsIcon/> </ListItemIcon>
+            </ListItem>
+          </List>
+        </Drawer>
 
-      <Switch>
-        <Route exact path="/"></Route>
+        <Switch>
+          <Route exact path="/"></Route>
 
-        <Route path="/settings"></Route>
-      </Switch>
-    </Router>
+          <Route path="/settings"></Route>
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
 
