@@ -1,3 +1,7 @@
+import './App.css';
+import { RootState } from './redux/store';
+import { persistActiveIcs } from './redux/reducer'
+
 import { useDispatch, useSelector } from 'react-redux'
 import{ Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
@@ -14,10 +18,6 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
 const { Component } = require('ical.js')
-
-import './App.css';
-import { RootState } from './redux/store';
-import { persistActiveIcs } from './redux/reducer'
 
 const selectActiveICS = (state : RootState) => {
   if (state.icsSlice.activeIcs != null) {
