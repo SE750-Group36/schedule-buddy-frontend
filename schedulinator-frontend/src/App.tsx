@@ -1,8 +1,7 @@
 import './App.css';
 import { RootState } from './redux/store';
-import { persistActiveIcs } from './redux/reducer'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import{ Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Drawer from '@material-ui/core/Drawer';
@@ -19,12 +18,13 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ThemeProvider } from '@material-ui/styles';
 import { useTheme } from '@material-ui/core';
+import { ICSImport } from './ICSImport';
 
 const { Component } = require('ical.js')
 
 const selectActiveICS = (state : RootState) => {
   if (state.icsSlice.activeIcs != null) {
-    var cal = new Component(state.icsSlice.activeIcs);
+    var cal = new Component(state.icsSlice.activeIcs.ics);
 
     return cal;
   }
@@ -39,11 +39,7 @@ const sideBarStyles = {
 } as React.CSSProperties;
 
 function App() {
-  const dispatch = useDispatch()
   const ics = useSelector(selectActiveICS)
-
-  const persistIcsThunk = persistActiveIcs(ics);
-  dispatch(persistIcsThunk);
 
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;

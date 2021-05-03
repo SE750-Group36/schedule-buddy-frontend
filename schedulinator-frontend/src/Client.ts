@@ -1,6 +1,5 @@
-const URL = 'http://localhost:23';
+const URL = 'http://localhost:3001';
 const OPTIONS = {
-  method: 'POST',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json;charset=UTF-8'
@@ -8,8 +7,15 @@ const OPTIONS = {
 };
 
 export async function Post(resource : string, body: any) {
-  var response = await fetch(URL + resource, {...OPTIONS, body: body});
-  body = await response.json();
+  var response = await fetch(URL + resource, {...OPTIONS, method: 'POST', body: body});
+  var body = await response.json();
+
+  return body;
+}
+
+export async function Get(resource : string) {
+  var response = await fetch(URL + resource, {...OPTIONS, method: 'GET'});
+  var body = await response.json();
 
   return body;
 }

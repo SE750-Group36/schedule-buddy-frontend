@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react';
 import { InputBase } from '@material-ui/core';
 import './App.css';
 import {
-  icsUpdate
+  icsUpdate, persistActiveIcs
 } from './redux/reducer'
 import { useDispatch } from 'react-redux';
 
@@ -19,10 +19,11 @@ export const ICSImport: FunctionComponent = () => {
       if (event.target?.result != null) {
         var fileData = event.target.result;
 
-        // Parsing file data into json and dispatching ics update
         var icsJson = parse(fileData.toString());
-        console.log(icsJson);
-        dispatch(icsUpdate(icsJson));
+
+        // Parsing file data into json and dispatching ics update
+        const persistIcsThunk = persistActiveIcs(icsJson);
+        dispatch(persistIcsThunk);
       }
     });
 
