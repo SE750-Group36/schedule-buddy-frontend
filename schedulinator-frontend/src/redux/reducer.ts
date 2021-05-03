@@ -15,13 +15,16 @@ interface Job {
 }
 
 export interface IcsState {
+  user : string,
   activeIcs : Ics,
   activeSchedule : Ics,
   schedulingPreferences : Object,
   jobs : Job[]
 }
 
-const initialState = { } as IcsState
+const initialState = { 
+  user : "TestUser"
+} as IcsState
 
 const icsSlice = createSlice({
   name: 'ics',
@@ -38,11 +41,11 @@ const icsSlice = createSlice({
 
 // Wrapper functions which build thunk functions used for async api calls
 export function persistActiveIcs(ics: Object) {
-  return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction<Ics>>, getState : any) {  
-    const response = await Post('/api/calendar/save', JSON.stringify(ics));
+  return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction<Ics>>, getState : any) {
+    var user = getState().icsSlice.user;
+    const response = await Post('/api/calendar', user, JSON.stringify(ics));
 
     var persistedIcs = { id: response.calName, ics } as Ics;
-    console.log(persistedIcs)
     dispatch({ type: 'ics/icsUpdate', payload: persistedIcs })
   }
 }
@@ -55,11 +58,12 @@ export function scheduleJobs() {
       jobs : state.icsSlice.jobs
     }
 
-    var path = '/api/calendar/schedule/' + 'testUser' + '?calendar=' + state.icsSlice.activeSchedule.id;
-    var response = await Post(path, JSON.stringify(requestBody));
+    var path = '/api/schedule/' + state.icsSlice.activeIcs.id;
+    var user = getState().icsSlice.user;
+    var response = await Post(path, user, JSON.stringify(requestBody));
 
-    path = '/api/schedule/' + response.scheduleId;
-    response = await Get(path);
+    var path = '/api/schedules/' + response.scheduleId;
+    response = await Get(path, user);
     dispatch({ type: 'ics/scheduleUpdate', payload: response })
   }
 }
