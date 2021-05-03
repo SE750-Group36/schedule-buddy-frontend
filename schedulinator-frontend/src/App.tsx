@@ -24,6 +24,9 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
 
 const { Component } = require('ical.js')
 
@@ -119,7 +122,12 @@ function App() {
           <Route exact path="/">
             <FullCalendar
               height='92vh'
-              plugins={[ dayGridPlugin ]}
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+              }}
               initialView="dayGridMonth"
               weekends={true}
               events={calendarData}
