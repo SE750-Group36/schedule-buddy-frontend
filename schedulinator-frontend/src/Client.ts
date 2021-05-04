@@ -10,11 +10,12 @@ const OPTIONS = {
   }
 };
 
-export async function Post(resource : string, user : string, body: any) {
+export async function Post(resource : string, user : string, payload: any) {
+  var body = JSON.stringify(payload);
   var response = await fetch(URL + resource, {...OPTIONS, method: 'POST', body, headers: {...headers, user}});
-  var body = await response.json();
+  var resBody = await response.json();
 
-  return body;
+  return resBody;
 }
 
 export async function Get(resource : string, user : string) {

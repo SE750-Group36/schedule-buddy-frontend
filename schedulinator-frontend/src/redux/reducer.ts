@@ -23,7 +23,7 @@ export interface IcsState {
 }
 
 const initialState = { 
-  user : "TestUser"
+  user : "608cbbadebda930016288b5c"
 } as IcsState
 
 const icsSlice = createSlice({
@@ -43,9 +43,13 @@ const icsSlice = createSlice({
 export function persistActiveIcs(ics: Object) {
   return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction<Ics>>, getState : any) {
     var user = getState().icsSlice.user;
-    const response = await Post('/api/calendar', user, JSON.stringify(ics));
+    const body = {
+      user,
+      calendar : ics
+    }
+    const response = await Post('/api/calendar', user, body);
 
-    var persistedIcs = { id: response.calName, ics } as Ics;
+    var persistedIcs = { id: response._id, ics } as Ics;
     dispatch({ type: 'ics/icsUpdate', payload: persistedIcs })
   }
 }
@@ -60,7 +64,7 @@ export function scheduleJobs() {
 
     var path = '/api/schedule/' + state.icsSlice.activeIcs.id;
     var user = getState().icsSlice.user;
-    var response = await Post(path, user, JSON.stringify(requestBody));
+    var response = await Post(path, user, requestBody);
 
     var path = '/api/schedules/' + response.scheduleId;
     response = await Get(path, user);
