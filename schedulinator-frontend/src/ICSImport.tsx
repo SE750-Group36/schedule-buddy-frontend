@@ -25,7 +25,9 @@ export const ICSImport: FunctionComponent = () => {
       }
     });
 
-    reader.readAsText(icsFile);
+    if (icsFile instanceof Blob) {
+      reader.readAsText(icsFile);
+    }
   }
 
   return (
