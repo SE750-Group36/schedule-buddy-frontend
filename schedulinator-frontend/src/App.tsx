@@ -8,7 +8,6 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -17,12 +16,13 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ThemeProvider } from '@material-ui/styles';
-import { useTheme } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core';
 import { ICSImport } from './ICSImport';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { PreferencesModal } from './PreferencesModal';
 
 
 const { Component } = require('ical.js')
@@ -47,9 +47,21 @@ function getPropertyForEvent(event: Array<any>, property: String): String{
   return event[1].filter((entry: any) => !entry[0].localeCompare(property))[0][3];
 }
 
+const useStyles = makeStyles((theme) => ({
+  pageContent: {
+    display: 'flex'
+  },
+  calendar : {
+    width : '100%',
+    padding : '12px'
+  }
+}));
+
 function App() {
   const ics = useSelector(selectActiveICS)
   const [calendarData, setCalendarData] = useState<Array<any>>();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const classes = useStyles();
 
   useEffect(() => {
     if(ics){
@@ -75,6 +87,8 @@ function App() {
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;
 
+
+
   return (
     <ThemeProvider theme={theme}>
       <Router history={history}>
@@ -90,45 +104,51 @@ function App() {
           </Toolbar>
         </AppBar>
         
-        <Drawer
-          variant="persistent"
-          anchor="left"
-          open={true}
-          PaperProps={{style: sideBarStyles}}
-        >
-          <List>
-            <ListItem>
-              <ListItemIcon> <CalendarTodayIcon/> </ListItemIcon>
-            </ListItem>
+        <div className={classes.pageContent}>
+          <Drawer
+            variant="persistent"
+            anchor="left"
+            open={true}
+            PaperProps={{style: sideBarStyles}}
+          >
+            <List>
+              <ListItem>
+                <IconButton onClick={() => {}} children={<CalendarTodayIcon/>} color="inherit" ></IconButton>
+              </ListItem>
 
-            <ListItem>
-              <ListItemIcon> <EventAvailableIcon/> </ListItemIcon>
-            </ListItem>
+              <ListItem>
+                <IconButton onClick={() => {}} children={<EventAvailableIcon/>} color="inherit" ></IconButton>
+              </ListItem>
 
-            <ListItem>
-              <ListItemIcon> <SettingsIcon/> </ListItemIcon>
-            </ListItem>
-          </List>
-        </Drawer>
+              <ListItem>
+                <IconButton onClick={() => {setModalOpen(true)}} children={<SettingsIcon/>} color="inherit" ></IconButton>
+              </ListItem>
+            </List>
+          </Drawer>
 
-        <Switch>
-          <Route exact path="/">
-            <FullCalendar
-              height='92vh'
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-              }}
-              initialView="dayGridMonth"
-              weekends={true}
-              events={calendarData}
-            />
-          </Route>
+          <Switch>
+            <Route exact path="/">
+              <div className={classes.calendar}>
+                <FullCalendar
+                  height='92vh'
+                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                  headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                  }}
+                  initialView="dayGridMonth"
+                  weekends={true}
+                  events={calendarData}
+                />
+              </div>
+            </Route>
 
-          <Route path="/settings"></Route>
-        </Switch>
+            <Route path="/settings"></Route>
+          </Switch>
+        </div>
+        
+        <PreferencesModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       </Router>
     </ThemeProvider>
   );

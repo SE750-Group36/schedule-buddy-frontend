@@ -66,7 +66,7 @@ export function scheduleJobs() {
     var user = getState().icsSlice.user;
     var response = await Post(path, user, requestBody);
 
-    var path = '/api/schedules/' + response.scheduleId;
+    path = '/api/schedules/' + response.scheduleId;
     response = await Get(path, user);
     dispatch({ type: 'ics/scheduleUpdate', payload: response })
   }

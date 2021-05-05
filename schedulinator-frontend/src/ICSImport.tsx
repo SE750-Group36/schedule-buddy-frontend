@@ -1,9 +1,7 @@
 import { FunctionComponent } from 'react'; 
 import { InputBase } from '@material-ui/core';
 import './App.css';
-import {
-  icsUpdate, persistActiveIcs
-} from './redux/reducer'
+import { persistActiveIcs } from './redux/reducer'
 import { useDispatch } from 'react-redux';
 
 const { parse } = require('ical.js')
