@@ -1,9 +1,9 @@
 import './App.css';
 import { RootState } from './redux/store';
-
 import { useSelector } from 'react-redux'
 import{ Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { useEffect, useState } from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -19,6 +19,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ThemeProvider } from '@material-ui/styles';
 import { useTheme } from '@material-ui/core';
 import { ICSImport } from './ICSImport';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
 
 const { Component } = require('ical.js')
 
@@ -38,8 +43,34 @@ const sideBarStyles = {
   position: 'relative'
 } as React.CSSProperties;
 
+function getPropertyForEvent(event: Array<any>, property: String): String{
+  return event[1].filter((entry: any) => !entry[0].localeCompare(property))[0][3];
+}
+
 function App() {
   const ics = useSelector(selectActiveICS)
+  const [calendarData, setCalendarData] = useState<Array<any>>();
+
+  useEffect(() => {
+    if(ics){
+      // Remove the time zone entry from the event list
+      const events = ics.jCal[2].slice(1)
+      const eventList: Array<any>= []
+      
+      events.forEach((event: any) => {
+        // Get the required properties and convert to calendar format
+        const calEvent = { 
+          title: getPropertyForEvent(event, "summary"), 
+          start: getPropertyForEvent(event, "dtstart"), 
+          end: getPropertyForEvent(event, "dtend")
+        };
+  
+        eventList.push(calEvent)
+      });
+
+      setCalendarData(eventList);
+    }
+  }, [ics])
 
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;
@@ -55,6 +86,7 @@ function App() {
               Add Event
             </Typography>
             <Button color="inherit">Login</Button>
+            <ICSImport/>
           </Toolbar>
         </AppBar>
         
@@ -80,7 +112,20 @@ function App() {
         </Drawer>
 
         <Switch>
-          <Route exact path="/"></Route>
+          <Route exact path="/">
+            <FullCalendar
+              height='92vh'
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+              }}
+              initialView="dayGridMonth"
+              weekends={true}
+              events={calendarData}
+            />
+          </Route>
 
           <Route path="/settings"></Route>
         </Switch>
