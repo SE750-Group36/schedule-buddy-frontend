@@ -1,33 +1,74 @@
 import { combineReducers, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "react"
-import { Post } from '../Client'
+import { Post, Get } from '../Client'
 
 // ICS Slice
-export interface IcsState {
-  activeIcs : Object;
-  activeIcsId : string;
+interface Ics {
+  id : string,
+  ics : Object
 }
 
-const initialState = { } as IcsState
+interface Job {
+  name: string,
+	estimatedTime: Date,
+	deadline: Date,
+}
+
+export interface IcsState {
+  user : string,
+  activeIcs : Ics,
+  activeSchedule : Ics,
+  schedulingPreferences : Object,
+  jobs : Job[]
+}
+
+const initialState = { 
+  user : "608cbbadebda930016288b5c"
+} as IcsState
 
 const icsSlice = createSlice({
   name: 'ics',
   initialState,
   reducers: {
-    icsUpdate(state, action: PayloadAction<Object>) {
+    icsUpdate(state, action: PayloadAction<Ics>) {
       state.activeIcs = action.payload
     },
-    icsPersisted(state, action: PayloadAction<string>) {
-      state.activeIcsId = action.payload
+    scheduleUpdate(state, action: PayloadAction<Ics>) {
+      state.activeSchedule = action.payload
     }
   },
 })
 
-// Wrapper function which builds thunk function used for async api call
+// Wrapper functions which build thunk functions used for async api calls
 export function persistActiveIcs(ics: Object) {
-  return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction>, getState : any) {  
-    const response = await Post('/fakeApi/todos', ics);
-    dispatch({ type: 'ics/icsPersisted', payload: response })
+  return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction<Ics>>, getState : any) {
+    var user = getState().icsSlice.user;
+    const body = {
+      user,
+      calendar : ics
+    }
+    const response = await Post('/api/calendar', user, body);
+
+    var persistedIcs = { id: response._id, ics } as Ics;
+    dispatch({ type: 'ics/icsUpdate', payload: persistedIcs })
+  }
+}
+
+export function scheduleJobs() {
+  return async function scheduleJobsThunk(dispatch : Dispatch<PayloadAction<Ics>>, getState : any) {  
+    var state = getState();
+    var requestBody = {
+      preferences : state.icsSlice.schedulingPreferences,
+      jobs : state.icsSlice.jobs
+    }
+
+    var path = '/api/schedule/' + state.icsSlice.activeIcs.id;
+    var user = getState().icsSlice.user;
+    var response = await Post(path, user, requestBody);
+
+    var path = '/api/schedules/' + response.scheduleId;
+    response = await Get(path, user);
+    dispatch({ type: 'ics/scheduleUpdate', payload: response })
   }
 }
 

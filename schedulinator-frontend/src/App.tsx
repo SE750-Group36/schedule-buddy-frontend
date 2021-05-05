@@ -1,15 +1,9 @@
 import './App.css';
 import { RootState } from './redux/store';
-import { persistActiveIcs } from './redux/reducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import{ Router, Switch, Route } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/styles';
-import { useTheme } from '@material-ui/core';
 import { createBrowserHistory } from 'history';
-import { makeStyles } from '@material-ui/core/styles';
-import { ICSImport } from './ICSImport';
 import { useEffect, useState } from 'react';
-
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -22,6 +16,9 @@ import Button from '@material-ui/core/Button';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { ThemeProvider } from '@material-ui/styles';
+import { useTheme } from '@material-ui/core';
+import { ICSImport } from './ICSImport';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -32,7 +29,7 @@ const { Component } = require('ical.js')
 
 const selectActiveICS = (state : RootState) => {
   if (state.icsSlice.activeIcs != null) {
-    var cal = new Component(state.icsSlice.activeIcs);
+    var cal = new Component(state.icsSlice.activeIcs.ics);
 
     return cal;
   }
@@ -51,7 +48,6 @@ function getPropertyForEvent(event: Array<any>, property: String): String{
 }
 
 function App() {
-  const dispatch = useDispatch()
   const ics = useSelector(selectActiveICS)
   const [calendarData, setCalendarData] = useState<Array<any>>();
 
@@ -75,9 +71,6 @@ function App() {
       setCalendarData(eventList);
     }
   }, [ics])
-
-  const persistIcsThunk = persistActiveIcs(ics);
-  dispatch(persistIcsThunk);
 
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;
