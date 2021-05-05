@@ -1,11 +1,10 @@
-import { Button, Divider, Fade, FormControl, FormControlLabel, FormLabel, IconButton, makeStyles, Modal, Paper, Radio, RadioGroup, TextField } from '@material-ui/core';
-import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider, TimePicker } from '@material-ui/pickers';
+import { Button, Divider, Fade, FormControl, FormControlLabel, IconButton, makeStyles, Modal, Paper, Radio, RadioGroup, TextField } from '@material-ui/core';
+import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { FunctionComponent, useState } from 'react'; 
 import DateFnsUtils from '@date-io/date-fns';
 import set from 'date-fns/set';
 import FreeBreakfastIcon from '@material-ui/icons/FreeBreakfast';
 import DeleteIcon from '@material-ui/icons/Delete';
-import DoneIcon from '@material-ui/icons/Done';
 import { format } from 'date-fns';
 
 enum Repeat {
@@ -190,13 +189,13 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
               <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
                 <RadioGroup name="Repeats" className={classes.radio} onChange={event => setRepeatMode(event.target.value)}>
-                  <FormControlLabel checked={repeats==Repeat.Never} value={Repeat.Never} control={<Radio />} label="One Off" />
-                  <FormControlLabel checked={repeats==Repeat.Daily} value={Repeat.Daily} control={<Radio />} label="Daily" />
-                  <FormControlLabel className={classes.prefVert} checked={repeats==Repeat.Weekly} value = {Repeat.Weekly} control={<Radio />} label="Weekly" />
+                  <FormControlLabel checked={repeats===Repeat.Never} value={Repeat.Never} control={<Radio />} label="One Off" />
+                  <FormControlLabel checked={repeats===Repeat.Daily} value={Repeat.Daily} control={<Radio />} label="Daily" />
+                  <FormControlLabel className={classes.prefVert} checked={repeats===Repeat.Weekly} value = {Repeat.Weekly} control={<Radio />} label="Weekly" />
                   <Button variant="outlined" color="primary" onClick={() => createBreak()}>Add</Button>
                 </RadioGroup>
                 <div style={{display: 'flex', flexDirection: 'column', marginRight: '30px'}}>
-                  {repeats!=Repeat.Daily ? <KeyboardDatePicker className={classes.breakField} size="small" variant="inline" label="Date" inputVariant="outlined" format={"iiii, do"} value={breakDate} onChange={date => date == null ? null : setBreakDate(date)} /> : ''}
+                  {repeats!==Repeat.Daily ? <KeyboardDatePicker className={classes.breakField} size="small" variant="inline" label="Date" inputVariant="outlined" format={"iiii, do"} value={breakDate} onChange={date => date == null ? null : setBreakDate(date)} /> : ''}
                   <KeyboardTimePicker className={classes.breakField} minutesStep={15} size="small" variant="inline" label="Start" inputVariant="outlined" format={"h:mmaaa"} value={breakStart} onChange={startTime => startTime == null ? null : setBreakStart(startTime)} />
                   <KeyboardTimePicker className={classes.breakField} minutesStep={15} size="small" variant="inline" label="End" inputVariant="outlined" format={"h:mmaaa"} value={breakEnd} onChange={endTime => endTime == null ? null : setBreakEnd(endTime)} />
                 </div>
