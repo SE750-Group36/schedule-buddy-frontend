@@ -83,9 +83,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export const PreferencesModal: FunctionComponent = () => {
+interface PreferencesModalProps {
+  modalOpen : boolean,
+  setModalOpen : Function
+}
+
+export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({modalOpen, setModalOpen}) => {
   const [preferences, setPreferences] = useState<SchedulingPreferences>(initialPreferences);
-  const [open, setOpen] = useState<boolean>(true)
   const [repeats, setRepeats] = useState<Repeat>(Repeat.Never);
   const [breakStart, setBreakStart] = useState<Date>(set(new Date(), {hours: 12, minutes: 0}));
   const [breakEnd, setBreakEnd] = useState<Date>(set(new Date(), {hours: 13, minutes: 0}));
@@ -165,10 +169,10 @@ export const PreferencesModal: FunctionComponent = () => {
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Modal
         className={classes.modal}
-        open={open}
-        onClose={() => setOpen(false)}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
       >
-        <Fade in={open}>
+        <Fade in={modalOpen}>
           <FormControl className={classes.paper}>
             <h3 className={classes.prefHor}>Scheduling Preferences</h3>
             <div className={classes.prefSettings}>
@@ -202,7 +206,7 @@ export const PreferencesModal: FunctionComponent = () => {
               </div>
             </div>
 
-            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px'}} onClick={() => setOpen(false)}>Done</Button>
+            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px'}} onClick={() => setModalOpen(false)}>Done</Button>
           </FormControl>
         </Fade>
         
