@@ -23,6 +23,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { PreferencesModal } from './PreferencesModal';
+import { Jobs } from './Jobs';
 
 
 const { Component } = require('ical.js')
@@ -87,8 +88,6 @@ function App() {
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;
 
-
-
   return (
     <ThemeProvider theme={theme}>
       <Router history={history}>
@@ -109,7 +108,7 @@ function App() {
             variant="persistent"
             anchor="left"
             open={true}
-            PaperProps={{style: sideBarStyles}}
+            PaperProps={{style: sideBarStyles, elevation: 3}}
           >
             <List>
               <ListItem>
@@ -125,6 +124,8 @@ function App() {
               </ListItem>
             </List>
           </Drawer>
+
+          <Jobs></Jobs>
 
           <Switch>
             <Route exact path="/">
