@@ -24,7 +24,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { PreferencesModal } from './PreferencesModal';
 import { Jobs } from './Jobs';
-
+import { Schedule } from './Schedule';
 
 const { Component } = require('ical.js')
 
@@ -100,6 +100,7 @@ function App() {
             </Typography>
             <Button color="inherit">Login</Button>
             <ICSImport/>
+            <Schedule></Schedule>
           </Toolbar>
         </AppBar>
         

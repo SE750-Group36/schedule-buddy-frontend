@@ -4,12 +4,9 @@ import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pi
 import { FunctionComponent, useState } from "react";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
-
-interface Job {
-  name : string,
-  estimatedTime : number, // Sent as hours also
-  deadline : Date
-}
+import { RootState } from "./redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { addJob, Job, removeJob } from './redux/reducer'
 
 const useStyles = makeStyles((theme) => ({
   jobsPanel : {
@@ -48,14 +45,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const selectJobs = (state : RootState) => {
+  return state.jobSlice.jobs;
+} 
+
 export const Jobs: FunctionComponent = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [name, setName] = useState<string>("Job");
   const [estimatedTime, setEstimatedTime] = useState<number>(10);
   const [deadline, setDeadline] = useState<Date | null>(null);
-  const [jobs, setJobs] = useState<{ [id: string] : Job }>({});
+  const jobs = useSelector(selectJobs);
 
-  const addJob = () => {
+  const createJob = () => {
     if (jobs[name] !== undefined) {
       // Avoiding duplicate jobs
       return;
@@ -67,19 +69,16 @@ export const Jobs: FunctionComponent = () => {
         estimatedTime,
         deadline
       }
-  
-      var newJobs = {
-        ...jobs,
-        [name] : job
-      };
-      setJobs(newJobs);
+
+      dispatch(addJob({id: job.name, job}))
     }
   }
 
   const deleteJob = (job: Job) => {
     var newJobs = {...jobs};
-    delete newJobs[job.name]
-    setJobs(newJobs);
+    delete newJobs[job.name];
+
+    dispatch(removeJob(job.name));
   }
 
   const jobPaper = (job: Job) => {
@@ -122,7 +121,7 @@ export const Jobs: FunctionComponent = () => {
           multiline
           />
           <Button
-            variant="contained" color="primary"  onClick={() => addJob()} className={classes.addButton}
+            variant="contained" color="primary"  onClick={() => createJob()} className={classes.addButton}
             disabled={deadline === null || name === '' || estimatedTime <= 0}> 
             Add
           </Button>
