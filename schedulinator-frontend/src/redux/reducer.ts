@@ -92,7 +92,6 @@ export function persistActiveIcs(ics: Object) {
   return async function persistActiveIcsThunk(dispatch : Dispatch<PayloadAction<Ics>>, getState : any) {
     var user = getState().userSlice.user;
     const body = {
-      user,
       calendar : ics
     }
 
@@ -114,7 +113,7 @@ export function scheduleJobs(calendarId : string, jobs : Job[], preferences: Sch
     var path = '/api/schedule/' + calendarId;
     var response = await Post(path, user, requestBody);
 
-    path = '/api/schedules/' + response.scheduleId;
+    path = '/api/schedule/' + response._id;
     response = await Get(path, user);
 
     dispatch(icsSlice.actions.scheduleUpdate(response));
