@@ -17,7 +17,7 @@ const initialUserState : UserState = {
     dailyStartTime : set(new Date(), {hours: 9, minutes: 0}),
     dailyEndTime : set(new Date(), {hours: 17, minutes: 0}),
     blockedTimes : [],
-    maxInterval : 120 // In minutes
+    maxInterval : 2 // In hours
   }
 }
 

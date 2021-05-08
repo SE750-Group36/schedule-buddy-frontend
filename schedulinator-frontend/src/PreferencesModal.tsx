@@ -186,7 +186,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
             <h3 className={classes.prefHor}>Scheduling Preferences</h3>
             <div className={classes.prefSettings}>
               <KeyboardDatePicker className={classes.prefHor} size="small" variant="inline" label="Start Date" inputVariant="outlined" format={"iiii, do"} value={preferences.startDate} onChange={startDate => updateTypeReferenceNode('startDate', startDate)} />
-              <TextField type="number" className={classes.prefHor} variant="outlined" size="small" label="Task Interval (Minutes)" value={preferences.maxInterval} onChange={event => setPreferences({...preferences, maxInterval: parseInt(event.target.value)})}/>
+              <TextField type="number" className={classes.prefHor} variant="outlined" size="small" label="Task Interval (Hours)" value={preferences.maxInterval} onChange={event => setPreferences({...preferences, maxInterval: parseInt(event.target.value)})}/>
               <div className={classes.dailyTimes}>
                 <KeyboardTimePicker className={classes.prefVert} minutesStep={15} size="small" variant="inline" label="Daily Start Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyStartTime} onChange={startTime => updateTypeReferenceNode('dailyStartTime', startTime)} />
                 <KeyboardTimePicker minutesStep={15} size="small" variant="inline" label="Daily Finish Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyEndTime} onChange={endTime => updateTypeReferenceNode('dailyEndTime', endTime)}/>
