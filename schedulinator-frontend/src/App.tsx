@@ -25,7 +25,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { PreferencesModal } from './PreferencesModal';
 import { Jobs } from './Jobs';
 import { ReactComponent as ScheduleBuddyLogo } from './scheduleBuddy.svg';
-
+import styled from "@emotion/styled";
 
 const { Component } = require('ical.js')
 
@@ -69,6 +69,34 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
+
+// needed for the style wrapper
+
+
+// add styles as css
+export const StyleWrapper = styled.div`
+  .fc-button.fc-prev-button, .fc-button.fc-next-button, .fc-button.fc-button-primary{
+    background: grey;
+    background-image: none;
+    border: none;
+    margin-right: 8px;
+    border-radius: 5px;
+  }
+  .fc-button.fc-button-primary.fc-button-active {
+    background: #CE9DD9;
+    background-image: none;
+    border: none; 
+  }
+  .fc-button.fc-button-primary:hover {
+    background: #CE9DD9;
+    background-image: none;
+    border: none; 
+  }
+  .fc-col-header-cell.fc-day {
+    background: rgba(206, 157, 217, 0.4);
+    border-color: grey;
+  }
+`
 
 function App() {
   const ics = useSelector(selectActiveICS)
@@ -142,18 +170,20 @@ function App() {
           <Switch>
             <Route exact path="/">
               <div className={classes.calendar}>
-                <FullCalendar
-                  height='92vh'
-                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                  headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                  }}
-                  initialView="dayGridMonth"
-                  weekends={true}
-                  events={calendarData}
-                />
+                <StyleWrapper>
+                  <FullCalendar
+                    height='92vh'
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    headerToolbar={{
+                      left: 'prev,next today',
+                      center: 'title',
+                      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    }}
+                    initialView="dayGridMonth"
+                    weekends={true}
+                    events={calendarData}
+                  />
+                </StyleWrapper>
               </div>
             </Route>
 

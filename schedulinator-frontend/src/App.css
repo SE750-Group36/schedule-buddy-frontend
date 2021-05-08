@@ -32,6 +32,16 @@ body {
   overflow: hidden;
 }
 
+.fc .fc-button-primary {
+  background-color: red;
+  color: red;
+}
+
+.fc-right .fc-prev-button, .fc-right .fc-next-button{
+  background-color: #b1d583;
+  background-image: none;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
