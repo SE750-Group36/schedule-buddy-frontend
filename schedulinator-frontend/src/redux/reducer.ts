@@ -49,12 +49,8 @@ const icsSlice = createSlice({
     icsUpdate(state, action: PayloadAction<Ics>) {
       state.activeIcs = action.payload
     },
-    scheduleUpdate(state, action: PayloadAction<{_id: string, schedule: Ics}>) {
-      var schedule : Ics = {
-        ics : action.payload.schedule,
-        id : action.payload._id
-      }
-      state.activeSchedule = schedule;
+    scheduleUpdate(state, action: PayloadAction<Ics>) {
+      state.activeSchedule = action.payload;
     }
   },
 })
@@ -120,7 +116,11 @@ export function scheduleJobs(calendarId : string, jobs : Job[], preferences: Sch
     path = '/api/schedule/' + response._id;
     response = await Get(path, user);
 
-    dispatch(icsSlice.actions.scheduleUpdate(response));
+    const schedule : Ics = {
+      id : response._id,
+      ics: response.schedule
+    }
+    dispatch(icsSlice.actions.scheduleUpdate(schedule));
   }
 }
 

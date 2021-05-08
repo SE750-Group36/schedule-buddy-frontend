@@ -134,7 +134,7 @@ function App() {
             </Typography>
             <Button color="inherit">Login</Button>
             <ICSImport/>
-            <Schedule></Schedule>
+            <Schedule/>
           </Toolbar>
         </AppBar>
         
@@ -160,7 +160,7 @@ function App() {
             </List>
           </Drawer>
 
-          <Jobs></Jobs>
+          <Jobs/>
 
           <Switch>
             <Route exact path="/">
