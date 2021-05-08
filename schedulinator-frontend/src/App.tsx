@@ -24,6 +24,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { PreferencesModal } from './PreferencesModal';
 import { Jobs } from './Jobs';
+import { ReactComponent as ScheduleBuddyLogo } from './scheduleBuddy.svg';
 
 
 const { Component } = require('ical.js')
@@ -55,7 +56,18 @@ const useStyles = makeStyles((theme) => ({
   calendar : {
     width : '100%',
     padding : '12px'
-  }
+  },
+  appBar : {
+    color: 'black',
+    background: 'white',
+  },
+  toolBar : {
+    paddingLeft: '10px',
+    paddingRight: '0px'
+  },
+  title: {
+    flexGrow: 1,
+  },
 }));
 
 function App() {
@@ -92,13 +104,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router history={history}>
 
-        <AppBar position="relative">
-          <Toolbar>
+        <AppBar className={classes.appBar} position="relative" >
+          <Toolbar className={classes.toolBar}>
+            <ScheduleBuddyLogo/>
             <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
-            <Typography variant="h6">
-              Add Event
+            <Typography variant="h6" className={classes.title}>
+              Schedule Buddy
             </Typography>
-            <Button color="inherit">Login</Button>
             <ICSImport/>
           </Toolbar>
         </AppBar>
