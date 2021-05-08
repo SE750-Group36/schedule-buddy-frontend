@@ -68,10 +68,14 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  icon: {
+    color: 'black',
+    '&:hover': {
+       color: '#CE9DD9',
+       background: 'none'
+    },
+  },
 }));
-
-// needed for the style wrapper
-
 
 // add styles as css
 export const StyleWrapper = styled.div`
@@ -152,15 +156,15 @@ function App() {
           >
             <List>
               <ListItem>
-                <IconButton onClick={() => {}} children={<CalendarTodayIcon/>} color="inherit" ></IconButton>
+                <IconButton className={classes.icon} onClick={() => {}} children={<CalendarTodayIcon/>} ></IconButton>
               </ListItem>
 
               <ListItem>
-                <IconButton onClick={() => {}} children={<EventAvailableIcon/>} color="inherit" ></IconButton>
+                <IconButton className={classes.icon} onClick={() => {}} children={<EventAvailableIcon/>} ></IconButton>
               </ListItem>
 
               <ListItem>
-                <IconButton onClick={() => {setModalOpen(true)}} children={<SettingsIcon/>} color="inherit" ></IconButton>
+                <IconButton className={classes.icon} onClick={() => {setModalOpen(true)}} children={<SettingsIcon/>} ></IconButton>
               </ListItem>
             </List>
           </Drawer>
