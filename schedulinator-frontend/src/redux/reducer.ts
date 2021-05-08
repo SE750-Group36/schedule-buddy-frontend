@@ -49,8 +49,12 @@ const icsSlice = createSlice({
     icsUpdate(state, action: PayloadAction<Ics>) {
       state.activeIcs = action.payload
     },
-    scheduleUpdate(state, action: PayloadAction<Ics>) {
-      state.activeSchedule = action.payload
+    scheduleUpdate(state, action: PayloadAction<{_id: string, schedule: Ics}>) {
+      var schedule : Ics = {
+        ics : action.payload.schedule,
+        id : action.payload._id
+      }
+      state.activeSchedule = schedule;
     }
   },
 })

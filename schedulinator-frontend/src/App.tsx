@@ -38,6 +38,17 @@ const selectActiveICS = (state : RootState) => {
   return null;
 }
 
+const selectActiveSchedule = (state : RootState) => {
+  if (state.icsSlice.activeSchedule != null) {
+    console.log(state.icsSlice.activeSchedule);
+    var schedule = new Component(state.icsSlice.activeSchedule.ics);
+
+    return schedule;
+  }
+  
+  return null;
+} 
+
 const history = createBrowserHistory();
 
 const sideBarStyles = {
@@ -60,7 +71,9 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const ics = useSelector(selectActiveICS)
-  const [calendarData, setCalendarData] = useState<Array<any>>();
+  const schedule = useSelector(selectActiveSchedule)
+  const [calendarData, setCalendarData] = useState<Array<any>>([]);
+  const [scheduleData, setScheduleData] = useState<Array<any>>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const classes = useStyles();
 
@@ -84,6 +97,27 @@ function App() {
       setCalendarData(eventList);
     }
   }, [ics])
+
+  useEffect(() => {
+    if(schedule){
+      // Remove the time zone entry from the event list
+      const events = schedule.jCal[2].slice(1)
+      const eventList: Array<any>= []
+      
+      events.forEach((event: any) => {
+        // Get the required properties and convert to calendar format
+        const calEvent = { 
+          title: getPropertyForEvent(event, "summary"), 
+          start: getPropertyForEvent(event, "dtstart"), 
+          end: getPropertyForEvent(event, "dtend")
+        };
+  
+        eventList.push(calEvent)
+      });
+
+      setScheduleData(eventList);
+    }
+  }, [schedule])
 
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;
@@ -141,7 +175,7 @@ function App() {
                   }}
                   initialView="dayGridMonth"
                   weekends={true}
-                  events={calendarData}
+                  eventSources={[calendarData, scheduleData]}
                 />
               </div>
             </Route>
@@ -151,6 +185,8 @@ function App() {
         </div>
         
         <PreferencesModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+
+        
       </Router>
     </ThemeProvider>
   );
