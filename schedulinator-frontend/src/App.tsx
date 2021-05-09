@@ -40,7 +40,6 @@ const selectActiveICS = (state : RootState) => {
 
 const selectActiveSchedule = (state : RootState) => {
   if (state.icsSlice.activeSchedule != null) {
-    console.log(state.icsSlice.activeSchedule);
     var schedule = new Component(state.icsSlice.activeSchedule.ics);
 
     return schedule;

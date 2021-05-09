@@ -99,7 +99,6 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
   const classes = useStyles();
 
   const updateTypeReferenceNode = (key: string, value : Date | number | null) => {
-    console.log(value);
     if (value != null) {
       setPreferences({
         ...preferences, 
