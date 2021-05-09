@@ -6,3 +6,5 @@
 3. Run 'npm install'
 4. Run 'npm start'
 5. The application should load
+
+## The meeting minutes and further documentation can be found in the back end project
