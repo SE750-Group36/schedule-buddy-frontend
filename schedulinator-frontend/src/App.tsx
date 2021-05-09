@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// add styles as css
+// Calendar styling
 export const StyleWrapper = styled.div`
   .fc-button.fc-prev-button, .fc-button.fc-next-button, .fc-button.fc-button-primary{
     background: grey;
@@ -99,6 +99,13 @@ export const StyleWrapper = styled.div`
   .fc-col-header-cell.fc-day {
     background: rgba(206, 157, 217, 0.4);
     border-color: grey;
+  }
+  .fc-daygrid-event-dot {
+    border: 4px solid #CE9DD9;
+  }
+  .fc-daygrid-block-event {
+    background: #CE9DD9;
+    border: none;
   }
 `
 
