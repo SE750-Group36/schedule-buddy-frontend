@@ -118,8 +118,7 @@ function App() {
 
         <AppBar className={classes.appBar} position="relative" >
           <Toolbar className={classes.toolBar}>
-            <ScheduleBuddyLogo/>
-            <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
+            <ScheduleBuddyLogo style={{ paddingRight : '12px' }}/>
             <Typography variant="h6" className={classes.title}>
               Schedule Buddy
             </Typography>
@@ -161,7 +160,7 @@ function App() {
                     }}
                     initialView="dayGridMonth"
                     weekends={true}
-                    events={calendarData}
+                    eventSources={[calendarData, scheduleData]}
                   />
                 </StyleWrapper>
               </div>
