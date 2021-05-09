@@ -8,3 +8,4 @@
 5. The application should load
 
 ## The meeting minutes and further documentation can be found in the back end project
+https://github.com/SE750-Group36/schedule-buddy-backend
