@@ -22,10 +22,29 @@ const useStyles = makeStyles((theme) => ({
   },
   inputField : {
     marginBottom : '12px',
+    '& input:valid + fieldset': {
+      borderColor: 'lightgrey',
+      borderWidth: 1,
+    },
+    '& input:valid:focus + fieldset': {
+      borderWidth: 2,
+      borderColor: '#B399D4',
+    },
+  },
+  inputLabel: {
+    "&.Mui-focused": {
+      color: "#B399D4"
+    }
   },
   deadlineInputField : {
     marginBottom : '12px',
-    width : '100%'
+    width : '100%',
+    "& .MuiInputBase-root.Mui-focused": {
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderWidth: 2,
+        borderColor: '#B399D4',
+      }
+    }
   },
   addButton : {
     marginBottom : '12px',
@@ -49,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   jobDetails : {
     margin : '0px'
-  }
+  },
 }));
 
 export const Jobs: FunctionComponent = () => {
@@ -110,19 +129,19 @@ export const Jobs: FunctionComponent = () => {
         <h3 className={classes.header}>Add Jobs</h3>
         <TextField 
           id="outlined-read-only-input" label="Name" variant="outlined" 
-          size="small" InputLabelProps={{shrink: true}} value={name}
+          size="small" InputLabelProps={{shrink: true, className: classes.inputLabel}} value={name}
           onChange={(event) => {setName(event.target.value)}}
           className={classes.inputField}
           />
         <TextField 
           type="number" variant="outlined" size="small" label="Estimated Time (Hours)" 
-          InputLabelProps={{shrink: true}} onChange={(event) => setEstimatedTime(parseInt(event.target.value))}
+          InputLabelProps={{shrink: true, className: classes.inputLabel}} onChange={(event) => setEstimatedTime(parseInt(event.target.value))}
           value={estimatedTime} className={classes.inputField}
           />
         <KeyboardDateTimePicker 
           size="small" variant="inline" label="Deadline" inputVariant="outlined" format="PPPPp"
           value={deadline} onChange={(date) => date == null ? null : setDeadline(date)} 
-          className={classes.deadlineInputField} clearable InputLabelProps={{shrink: true}}
+          className={classes.deadlineInputField} clearable InputLabelProps={{shrink: true, className: classes.inputLabel}}
           multiline
           />
           <Button
