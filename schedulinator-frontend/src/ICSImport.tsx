@@ -1,18 +1,10 @@
 import { FunctionComponent } from 'react'; 
-import { InputBase } from '@material-ui/core';
 import './App.css';
 import { persistActiveIcs } from './redux/reducer'
 import { useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core';
+import { useStyles } from './styles/ICSImport.styles'
 
 const { parse } = require('ical.js')
-
-const useStyles = makeStyles((theme) => ({
-  icsImport: {
-    display: 'none'
-  }
-}));
-
 
 export const ICSImport: FunctionComponent = () => {
   const dispatch = useDispatch()

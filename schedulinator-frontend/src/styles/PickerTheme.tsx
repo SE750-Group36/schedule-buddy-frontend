@@ -60,11 +60,3 @@ export const pickerTheme = createMuiTheme({
       },
     },
   });
-
-
-//   "& .MuiInputBase-root.Mui-focused": {
-//     "& .MuiOutlinedInput-notchedOutline": {
-//       borderWidth: 2,
-//       borderColor: '#B399D4',
-//     }
-//   }

@@ -4,18 +4,7 @@ import './App.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { scheduleJobs } from './redux/reducer';
 import { RootState } from './redux/store';
-import classes from '*.module.css';
-
-const useStyles = makeStyles((theme) => ({
-  scheduleButton: {
-    color: 'white',
-    backgroundColor: "rgba(206, 157, 217, 0.8)",
-    marginRight: '10px',
-    '&:hover': {
-      backgroundColor: "#CE9DD9",
-   },
-  }
-}));
+import { useStyles } from './styles/Schedule.styles';
 
 const selectScheduleInputs = (state: RootState) => {
   const calendarId = state.icsSlice.activeIcs != null ? state.icsSlice.activeIcs.id : null;
