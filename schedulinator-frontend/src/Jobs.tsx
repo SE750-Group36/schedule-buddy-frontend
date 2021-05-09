@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   jobDetails : {
     margin : '0px'
-  },
+  }
 }));
 
 export const Jobs: FunctionComponent = () => {
