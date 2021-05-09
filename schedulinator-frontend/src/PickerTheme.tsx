@@ -51,11 +51,6 @@ export const pickerTheme = createMuiTheme({
           color: 'black',
         },
       },
-      MuiPickersModal: {
-        dialogAction: {
-          color: 'green',
-        },
-      },
       MuiPickerDTTabs: {
         tabs: {
             color: 'white',
