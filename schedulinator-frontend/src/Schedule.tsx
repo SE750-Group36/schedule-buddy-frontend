@@ -9,7 +9,11 @@ import classes from '*.module.css';
 const useStyles = makeStyles((theme) => ({
   scheduleButton: {
     color: 'white',
-    backgroundColor: "#CE9DD9"
+    backgroundColor: "rgba(206, 157, 217, 0.8)",
+    marginRight: '10px',
+    '&:hover': {
+      backgroundColor: "#CE9DD9",
+   },
   }
 }));
 

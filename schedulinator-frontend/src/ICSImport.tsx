@@ -3,23 +3,20 @@ import { InputBase } from '@material-ui/core';
 import './App.css';
 import { persistActiveIcs } from './redux/reducer'
 import { useDispatch } from 'react-redux';
-import { makeStyles, useTheme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 const { parse } = require('ical.js')
 
 const useStyles = makeStyles((theme) => ({
   icsImport: {
-    width: 'fit-content',
-    display: 'inline-block',
-    marginRight: '0px'
+    display: 'none'
   }
 }));
 
 
 export const ICSImport: FunctionComponent = () => {
   const dispatch = useDispatch()
-  const classes = useStyles();
-
+  const classes = useStyles()
 
   var readICS = (event: any) => {
     var icsFile = event.target.files[0];
@@ -43,8 +40,6 @@ export const ICSImport: FunctionComponent = () => {
   }
 
   return (
-    <div>
-      <InputBase inputProps={{'accept' : '.ics'}} className={classes.icsImport} type='file' onChange={(event) => readICS(event)}></InputBase>
-    </div>
+    <input id='icsimport' className={classes.icsImport} accept='.ics' type='file' onChange={(event) => readICS(event)}></input>
   );
 }

@@ -6,18 +6,16 @@ import { createBrowserHistory } from 'history';
 import { useEffect, useState } from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
+import QueueIcon from '@material-ui/icons/Queue';
 import { ThemeProvider } from '@material-ui/styles';
 import { makeStyles, useTheme } from '@material-ui/core';
-import { ICSImport } from './ICSImport';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -27,6 +25,8 @@ import { Jobs } from './Jobs';
 import { ReactComponent as ScheduleBuddyLogo } from './scheduleBuddy.svg';
 import styled from "@emotion/styled";
 import { Schedule } from './Schedule';
+import { ICSExport } from './ICSExport';
+import { ICSImport } from './ICSImport';
 
 const { Component } = require('ical.js')
 
@@ -190,8 +190,8 @@ function App() {
             <Typography variant="h6" className={classes.title}>
               Schedule Buddy
             </Typography>
-            <ICSImport/>
             <Schedule/>
+            <ICSExport/>
           </Toolbar>
         </AppBar>
         
@@ -204,13 +204,8 @@ function App() {
           >
             <List>
               <ListItem>
-                <IconButton className={classes.icon} onClick={() => {}} children={<CalendarTodayIcon/>} ></IconButton>
+                <IconButton component='label' className={classes.icon} children={[<QueueIcon/>, <ICSImport/>]} ></IconButton>
               </ListItem>
-
-              <ListItem>
-                <IconButton className={classes.icon} onClick={() => {}} children={<EventAvailableIcon/>} ></IconButton>
-              </ListItem>
-
               <ListItem>
                 <IconButton className={classes.icon} onClick={() => {setModalOpen(true)}} children={<SettingsIcon/>} ></IconButton>
               </ListItem>
