@@ -8,7 +8,7 @@
 5. The application should load
 
 ## To Use
-1. Click the gear icon on the sidebar, and set your scheduling preferences using the date and time pickers, then click 'done'
+1. Click the gear icon on the sidebar to open settings, and set your scheduling preferences using the date and time pickers, then click 'done'
 2. Click the '+' icon on the sidebar and upload a .ics file from your computer
 3. Add at least one job in the 'Add Jobs' section to the left of the main calendar
 4. Once all your jobs are added, click the 'Schedule' button in the top right of the screen to generate your schedule
