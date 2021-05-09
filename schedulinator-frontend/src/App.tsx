@@ -83,18 +83,20 @@ export const StyleWrapper = styled.div`
     background: grey;
     background-image: none;
     border: none;
-    margin-right: 8px;
     border-radius: 5px;
+    box-shadow: none !important;
   }
   .fc-button.fc-button-primary.fc-button-active {
     background: #CE9DD9;
-    background-image: none;
-    border: none; 
+    box-shadow: none !important;
+  }
+  .fc-button.fc-button-primary.fc-button-active:hover {
+    background: #CE9DD9;
   }
   .fc-button.fc-button-primary:hover {
-    background: #CE9DD9;
+    background: #B399D4;
     background-image: none;
-    border: none; 
+    box-shadow: none !important;
   }
   .fc-col-header-cell.fc-day {
     background: rgba(206, 157, 217, 0.4);
