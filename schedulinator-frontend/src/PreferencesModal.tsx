@@ -136,7 +136,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
   }
 
   const deleteBreak = (index: number) => {
-    var breakTimes = preferences.blockedTimes;
+    var breakTimes = [...preferences.blockedTimes];
     breakTimes.splice(index, 1);
     setPreferences({...preferences, blockedTimes: breakTimes})
   }
