@@ -1,13 +1,14 @@
 import { FunctionComponent } from 'react'; 
-import { InputBase } from '@material-ui/core';
 import './App.css';
 import { persistActiveIcs } from './redux/reducer'
 import { useDispatch } from 'react-redux';
+import { useStyles } from './styles/ICSImport.styles'
 
 const { parse } = require('ical.js')
 
 export const ICSImport: FunctionComponent = () => {
   const dispatch = useDispatch()
+  const classes = useStyles()
 
   var readICS = (event: any) => {
     var icsFile = event.target.files[0];
@@ -31,8 +32,6 @@ export const ICSImport: FunctionComponent = () => {
   }
 
   return (
-    <div>
-      <InputBase inputProps={{'accept' : '.ics'}} className='ICSImportButton' type='file' onChange={(event) => readICS(event)}></InputBase>
-    </div>
+    <input id='icsimport' className={classes.icsImport} accept='.ics' type='file' onChange={(event) => readICS(event)}></input>
   );
 }

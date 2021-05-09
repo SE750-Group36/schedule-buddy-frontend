@@ -11,20 +11,21 @@ import ListItem from '@material-ui/core/ListItem';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import SettingsIcon from '@material-ui/icons/Settings';
+import QueueIcon from '@material-ui/icons/Queue';
 import { ThemeProvider } from '@material-ui/styles';
-import { makeStyles, useTheme } from '@material-ui/core';
-import { ICSImport } from './ICSImport';
+import { useTheme } from '@material-ui/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { PreferencesModal } from './PreferencesModal';
 import { Jobs } from './Jobs';
+import { ReactComponent as ScheduleBuddyLogo } from './scheduleBuddy.svg';
 import { Schedule } from './Schedule';
+import { ICSExport } from './ICSExport';
+import { ICSImport } from './ICSImport';
+import { StyleWrapper, useStyles } from './styles/App.styles'
 
 const { Component } = require('ical.js')
 
@@ -57,16 +58,6 @@ const sideBarStyles = {
 function getPropertyForEvent(event: Array<any>, property: String): String{
   return event[1].filter((entry: any) => !entry[0].localeCompare(property))[0][3];
 }
-
-const useStyles = makeStyles((theme) => ({
-  pageContent: {
-    display: 'flex'
-  },
-  calendar : {
-    width : '100%',
-    padding : '12px'
-  }
-}));
 
 function App() {
   const ics = useSelector(selectActiveICS)
@@ -125,15 +116,15 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router history={history}>
 
-        <AppBar position="relative">
-          <Toolbar>
+        <AppBar className={classes.appBar} position="relative" >
+          <Toolbar className={classes.toolBar}>
+            <ScheduleBuddyLogo/>
             <IconButton edge="start" color="inherit" aria-label="menu"></IconButton>
-            <Typography variant="h6">
-              Add Event
+            <Typography variant="h6" className={classes.title}>
+              Schedule Buddy
             </Typography>
-            <Button color="inherit">Login</Button>
-            <ICSImport/>
             <Schedule/>
+            <ICSExport/>
           </Toolbar>
         </AppBar>
         
@@ -146,15 +137,10 @@ function App() {
           >
             <List>
               <ListItem>
-                <IconButton onClick={() => {}} children={<CalendarTodayIcon/>} color="inherit" ></IconButton>
+                <IconButton component='label' className={classes.icon} children={[<QueueIcon/>, <ICSImport/>]} ></IconButton>
               </ListItem>
-
               <ListItem>
-                <IconButton onClick={() => {}} children={<EventAvailableIcon/>} color="inherit" ></IconButton>
-              </ListItem>
-
-              <ListItem>
-                <IconButton onClick={() => {setModalOpen(true)}} children={<SettingsIcon/>} color="inherit" ></IconButton>
+                <IconButton className={classes.icon} onClick={() => {setModalOpen(true)}} children={<SettingsIcon/>} ></IconButton>
               </ListItem>
             </List>
           </Drawer>
@@ -164,18 +150,20 @@ function App() {
           <Switch>
             <Route exact path="/">
               <div className={classes.calendar}>
-                <FullCalendar
-                  height='92vh'
-                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                  headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                  }}
-                  initialView="dayGridMonth"
-                  weekends={true}
-                  eventSources={[calendarData, scheduleData]}
-                />
+                <StyleWrapper>
+                  <FullCalendar
+                    height='92vh'
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    headerToolbar={{
+                      left: 'prev,next today',
+                      center: 'title',
+                      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    }}
+                    initialView="dayGridMonth"
+                    weekends={true}
+                    events={calendarData}
+                  />
+                </StyleWrapper>
               </div>
             </Route>
 

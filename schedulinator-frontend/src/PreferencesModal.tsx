@@ -5,10 +5,13 @@ import DateFnsUtils from '@date-io/date-fns';
 import set from 'date-fns/set';
 import FreeBreakfastIcon from '@material-ui/icons/FreeBreakfast';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { pickerTheme } from './styles/PickerTheme'
+import { ThemeProvider } from "@material-ui/styles";
 import { format } from 'date-fns';
 import { RootState } from './redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { preferencesUpdate } from './redux/reducer';
+import { useStyles } from './styles/PreferencesModal.styles';
 
 enum Repeat {
   Never,
@@ -30,52 +33,6 @@ export interface SchedulingPreferences {
   blockedTimes : BreakTime[]
   maxInterval : number
 }
-
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(0, 4, 3),
-    justifyContent: 'space-between',
-  },
-  prefHor: {
-    marginRight: '30px'
-  },
-  prefVert: {
-    marginBottom: '20px'
-  },
-  breakField: {
-    marginBottom: '20px',
-    maxWidth: '250px'
-  },
-  radio : {
-    marginBottom: '20px',
-    marginRight : '30px'
-  },
-  breakTime : {
-    marginBottom: '10px',
-    paddingLeft : '5px',
-    paddingRight : '5px',
-    display : 'flex',
-    alignItems : 'center',
-    justifyContent : 'space-between',
-    width : '100%'
-  },
-  prefSettings : {
-    marginBottom: '20px',
-    display : 'flex'
-  },
-  dailyTimes : {
-    display : 'flex',
-    flexDirection : 'column'
-  }
-}));
 
 interface PreferencesModalProps {
   modalOpen : boolean,
@@ -158,7 +115,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
 
     return (
       <Paper className={classes.breakTime} key={index} elevation={3} variant="outlined"> 
-        <FreeBreakfastIcon color="primary" style={{padding : '6px'}}/>
+        <FreeBreakfastIcon style={{padding : '6px', color : "#B399D4"}}/>
         <span>{dateString}</span>
         <span>{timeString}</span>
         <IconButton onClick={() => deleteBreak(index)} children={<DeleteIcon fontSize="small" color="action"/>} color="inherit" style={{padding : '6px'}}></IconButton>
@@ -184,11 +141,15 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
           <FormControl className={classes.paper}>
             <h3 className={classes.prefHor}>Scheduling Preferences</h3>
             <div className={classes.prefSettings}>
-              <KeyboardDatePicker className={classes.prefHor} size="small" variant="inline" label="Start Date" inputVariant="outlined" format={"iiii, do"} value={preferences.startDate} onChange={startDate => updateTypeReferenceNode('startDate', startDate)} />
-              <TextField type="number" className={classes.prefHor} variant="outlined" size="small" label="Task Interval (Hours)" value={preferences.maxInterval} onChange={event => setPreferences({...preferences, maxInterval: parseInt(event.target.value)})}/>
+              <ThemeProvider theme={pickerTheme}> 
+                <KeyboardDatePicker className={classes.prefHor} size="small" variant="inline" label="Start Date" inputVariant="outlined" format={"iiii, do"} value={preferences.startDate} onChange={startDate => updateTypeReferenceNode('startDate', startDate)} InputLabelProps={{className: classes.inputLabel}}/>
+                <TextField type="number" className={classes.prefHor} variant="outlined" size="small" label="Task Interval (Minutes)" value={preferences.maxInterval} onChange={event => setPreferences({...preferences, maxInterval: parseInt(event.target.value)})} InputLabelProps={{className: classes.inputLabel}}/>
+              </ThemeProvider>
               <div className={classes.dailyTimes}>
-                <KeyboardTimePicker className={classes.prefVert} minutesStep={15} size="small" variant="inline" label="Daily Start Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyStartTime} onChange={startTime => updateTypeReferenceNode('dailyStartTime', startTime)} />
-                <KeyboardTimePicker minutesStep={15} size="small" variant="inline" label="Daily Finish Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyEndTime} onChange={endTime => updateTypeReferenceNode('dailyEndTime', endTime)}/>
+                <ThemeProvider theme={pickerTheme}>
+                  <KeyboardTimePicker className={classes.prefVert} minutesStep={15} size="small" variant="inline" label="Daily Start Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyStartTime} onChange={startTime => updateTypeReferenceNode('dailyStartTime', startTime)} InputLabelProps={{className: classes.inputLabel}}/>
+                  <KeyboardTimePicker minutesStep={15} size="small" variant="inline" label="Daily Finish Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyEndTime} onChange={endTime => updateTypeReferenceNode('dailyEndTime', endTime)} InputLabelProps={{className: classes.inputLabel}}/>
+                </ThemeProvider>
               </div>
             </div>
 
@@ -198,23 +159,24 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
               <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
                 <RadioGroup name="Repeats" className={classes.radio} onChange={event => setRepeatMode(event.target.value)}>
-                  <FormControlLabel checked={repeats===Repeat.Never} value={Repeat.Never} control={<Radio />} label="One Off" />
-                  <FormControlLabel checked={repeats===Repeat.Daily} value={Repeat.Daily} control={<Radio />} label="Daily" />
-                  <FormControlLabel className={classes.prefVert} checked={repeats===Repeat.Weekly} value = {Repeat.Weekly} control={<Radio />} label="Weekly" />
-                  <Button variant="outlined" color="primary" onClick={() => createBreak()}>Add</Button>
+                  <FormControlLabel checked={repeats===Repeat.Never} value={Repeat.Never} control={<Radio classes={{root: classes.formRadio, checked: classes.checked}} />} label="One Off" />
+                  <FormControlLabel checked={repeats===Repeat.Daily} value={Repeat.Daily} control={<Radio classes={{root: classes.formRadio, checked: classes.checked}} />} label="Daily" />
+                  <FormControlLabel className={classes.prefVert} checked={repeats===Repeat.Weekly} value = {Repeat.Weekly} control={<Radio classes={{root: classes.formRadio, checked: classes.checked}} />} label="Weekly" />
+                  <Button variant="outlined" className={classes.addButton} onClick={() => createBreak()}>Add</Button>
                 </RadioGroup>
                 <div style={{display: 'flex', flexDirection: 'column', marginRight: '30px'}}>
-                  {repeats!==Repeat.Daily ? <KeyboardDatePicker className={classes.breakField} size="small" variant="inline" label="Date" inputVariant="outlined" format={"iiii, do"} value={breakDate} onChange={date => date == null ? null : setBreakDate(date)} /> : ''}
-                  <KeyboardTimePicker className={classes.breakField} minutesStep={15} size="small" variant="inline" label="Start" inputVariant="outlined" format={"h:mmaaa"} value={breakStart} onChange={startTime => startTime == null ? null : setBreakStart(startTime)} />
-                  <KeyboardTimePicker className={classes.breakField} minutesStep={15} size="small" variant="inline" label="End" inputVariant="outlined" format={"h:mmaaa"} value={breakEnd} onChange={endTime => endTime == null ? null : setBreakEnd(endTime)} />
+                  <ThemeProvider theme={pickerTheme}>
+                    {repeats!==Repeat.Daily ? <KeyboardDatePicker className={classes.breakField} size="small" variant="inline" label="Date" inputVariant="outlined" format={"iiii, do"} value={breakDate} onChange={date => date == null ? null : setBreakDate(date)} InputLabelProps={{className: classes.inputLabel}} /> : ''}
+                    <KeyboardTimePicker className={classes.breakField} minutesStep={15} size="small" variant="inline" label="Start" inputVariant="outlined" format={"h:mmaaa"} value={breakStart} onChange={startTime => startTime == null ? null : setBreakStart(startTime)} InputLabelProps={{className: classes.inputLabel}} />
+                    <KeyboardTimePicker className={classes.breakField} minutesStep={15} size="small" variant="inline" label="End" inputVariant="outlined" format={"h:mmaaa"} value={breakEnd} onChange={endTime => endTime == null ? null : setBreakEnd(endTime)} InputLabelProps={{className: classes.inputLabel}} />
+                  </ThemeProvider>
                 </div>
               </div>
               <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '400px'}}>
                 {preferences.blockedTimes.map((breakTime, index) => breakTimePaper(breakTime, index))}
               </div>
             </div>
-
-            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px'}} onClick={() => handleClose()}>Done</Button>
+            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px', backgroundColor: '#B399D4'}} onClick={() => handleClose()}>Done</Button>
           </FormControl>
         </Fade>
         

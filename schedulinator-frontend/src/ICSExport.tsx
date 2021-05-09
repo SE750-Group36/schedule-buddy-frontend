@@ -4,6 +4,7 @@ import './App.css';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store';
 import { saveAs } from 'file-saver'
+import { useStyles } from './styles/ICSExport.styles'
 
 const { Component } = require('ical.js')
 
@@ -18,6 +19,7 @@ const selectActiveSchedule = (state : RootState) => {
 }
 export const ICSExport: FunctionComponent = () => {
   const schedule = useSelector(selectActiveSchedule)
+  const classes = useStyles()
 
   const exportSchedule = () => {
     if (schedule != null) {
@@ -27,7 +29,7 @@ export const ICSExport: FunctionComponent = () => {
   }
 
   return (
-    <Button variant="contained" color="primary"  onClick={() => exportSchedule()}>
+    <Button variant="contained" className={classes.exportButton} onClick={() => exportSchedule()}>
       Export Schedule
     </Button>
   );

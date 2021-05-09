@@ -1,6 +1,5 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Schedule Buddy",
   "icons": [
     {
       "src": "favicon.ico",
