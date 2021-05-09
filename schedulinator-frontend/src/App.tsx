@@ -26,6 +26,7 @@ import { PreferencesModal } from './PreferencesModal';
 import { Jobs } from './Jobs';
 import { ReactComponent as ScheduleBuddyLogo } from './scheduleBuddy.svg';
 import styled from "@emotion/styled";
+import { Schedule } from './Schedule';
 
 const { Component } = require('ical.js')
 
@@ -38,6 +39,16 @@ const selectActiveICS = (state : RootState) => {
   
   return null;
 }
+
+const selectActiveSchedule = (state : RootState) => {
+  if (state.icsSlice.activeSchedule != null) {
+    var schedule = new Component(state.icsSlice.activeSchedule.ics);
+
+    return schedule;
+  }
+  
+  return null;
+} 
 
 const history = createBrowserHistory();
 
@@ -117,7 +128,9 @@ export const StyleWrapper = styled.div`
 
 function App() {
   const ics = useSelector(selectActiveICS)
-  const [calendarData, setCalendarData] = useState<Array<any>>();
+  const schedule = useSelector(selectActiveSchedule)
+  const [calendarData, setCalendarData] = useState<Array<any>>([]);
+  const [scheduleData, setScheduleData] = useState<Array<any>>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const classes = useStyles();
 
@@ -142,6 +155,27 @@ function App() {
     }
   }, [ics])
 
+  useEffect(() => {
+    if(schedule){
+      // Remove the time zone entry from the event list
+      const events = schedule.jCal[2].slice(1)
+      const eventList: Array<any>= []
+      
+      events.forEach((event: any) => {
+        // Get the required properties and convert to calendar format
+        const calEvent = { 
+          title: getPropertyForEvent(event, "summary"), 
+          start: getPropertyForEvent(event, "dtstart"), 
+          end: getPropertyForEvent(event, "dtend")
+        };
+  
+        eventList.push(calEvent)
+      });
+
+      setScheduleData(eventList);
+    }
+  }, [schedule])
+
   const theme = useTheme();
   theme.zIndex.appBar = theme.zIndex.drawer + 50;
 
@@ -157,6 +191,7 @@ function App() {
               Schedule Buddy
             </Typography>
             <ICSImport/>
+            <Schedule/>
           </Toolbar>
         </AppBar>
         
@@ -182,7 +217,7 @@ function App() {
             </List>
           </Drawer>
 
-          <Jobs></Jobs>
+          <Jobs/>
 
           <Switch>
             <Route exact path="/">
@@ -209,6 +244,8 @@ function App() {
         </div>
         
         <PreferencesModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+
+        
       </Router>
     </ThemeProvider>
   );
