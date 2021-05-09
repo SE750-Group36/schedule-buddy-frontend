@@ -79,7 +79,16 @@ const useStyles = makeStyles((theme) => ({
   dailyTimes : {
     display : 'flex',
     flexDirection : 'column'
-  }
+  },
+  addButton : {
+    borderColor: '#B399D4',
+  },
+  formRadio: {
+    '&$checked': {
+      color: '#B399D4'
+    }
+  },
+  checked: {}
 }));
 
 interface PreferencesModalProps {
@@ -156,7 +165,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
 
     return (
       <Paper className={classes.breakTime} key={index} elevation={3} variant="outlined"> 
-        <FreeBreakfastIcon color="primary" style={{padding : '6px'}}/>
+        <FreeBreakfastIcon style={{padding : '6px', color : "#B399D4"}}/>
         <span>{dateString}</span>
         <span>{timeString}</span>
         <IconButton onClick={() => deleteBreak(index)} children={<DeleteIcon fontSize="small" color="action"/>} color="inherit" style={{padding : '6px'}}></IconButton>
@@ -189,10 +198,10 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
               <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
                 <RadioGroup name="Repeats" className={classes.radio} onChange={event => setRepeatMode(event.target.value)}>
-                  <FormControlLabel checked={repeats===Repeat.Never} value={Repeat.Never} control={<Radio />} label="One Off" />
-                  <FormControlLabel checked={repeats===Repeat.Daily} value={Repeat.Daily} control={<Radio />} label="Daily" />
-                  <FormControlLabel className={classes.prefVert} checked={repeats===Repeat.Weekly} value = {Repeat.Weekly} control={<Radio />} label="Weekly" />
-                  <Button variant="outlined" color="primary" onClick={() => createBreak()}>Add</Button>
+                  <FormControlLabel checked={repeats===Repeat.Never} value={Repeat.Never} control={<Radio classes={{root: classes.formRadio, checked: classes.checked}} />} label="One Off" />
+                  <FormControlLabel checked={repeats===Repeat.Daily} value={Repeat.Daily} control={<Radio classes={{root: classes.formRadio, checked: classes.checked}} />} label="Daily" />
+                  <FormControlLabel className={classes.prefVert} checked={repeats===Repeat.Weekly} value = {Repeat.Weekly} control={<Radio classes={{root: classes.formRadio, checked: classes.checked}} />} label="Weekly" />
+                  <Button variant="outlined" className={classes.addButton} onClick={() => createBreak()}>Add</Button>
                 </RadioGroup>
                 <div style={{display: 'flex', flexDirection: 'column', marginRight: '30px'}}>
                   {repeats!==Repeat.Daily ? <KeyboardDatePicker className={classes.breakField} size="small" variant="inline" label="Date" inputVariant="outlined" format={"iiii, do"} value={breakDate} onChange={date => date == null ? null : setBreakDate(date)} /> : ''}
@@ -205,7 +214,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
               </div>
             </div>
 
-            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px'}} onClick={() => setModalOpen(false)}>Done</Button>
+            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px', backgroundColor: '#B399D4'}} onClick={() => setModalOpen(false)}>Done</Button>
           </FormControl>
         </Fade>
         

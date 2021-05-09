@@ -29,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
   },
   addButton : {
     marginBottom : '12px',
+    backgroundColor : '#B399D4',
+    '&:hover': {
+      backgroundColor: '#CE9DD9',
+   },
   },
   jobPaper : {
     display : 'flex',

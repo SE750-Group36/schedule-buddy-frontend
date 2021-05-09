@@ -107,6 +107,10 @@ export const StyleWrapper = styled.div`
     background: #CE9DD9;
     border: none;
   }
+  .fc-v-event {
+    background: #CE9DD9;
+    border: none;
+  }
 `
 
 function App() {
