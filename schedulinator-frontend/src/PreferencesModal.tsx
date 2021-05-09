@@ -6,6 +6,9 @@ import set from 'date-fns/set';
 import FreeBreakfastIcon from '@material-ui/icons/FreeBreakfast';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
+import { RootState } from './redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { preferencesUpdate } from './redux/reducer';
 
 enum Repeat {
   Never,
@@ -20,20 +23,12 @@ interface BreakTime {
   repeats : Repeat,
 }
 
-interface SchedulingPreferences {
+export interface SchedulingPreferences {
   startDate : Date,
   dailyStartTime : Date, 
   dailyEndTime : Date,
   blockedTimes : BreakTime[]
   maxInterval : number
-}
-
-const initialPreferences : SchedulingPreferences = {
-  startDate : new Date(Date.now()),
-  dailyStartTime : set(new Date(), {hours: 9, minutes: 0}),
-  dailyEndTime : set(new Date(), {hours: 17, minutes: 0}),
-  blockedTimes : [],
-  maxInterval : 120 // In minutes
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -87,12 +82,20 @@ interface PreferencesModalProps {
   setModalOpen : Function
 }
 
+const selectPreferences = (state: RootState) => {
+  return state.userSlice.schedulingPreferences;
+}
+
 export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({modalOpen, setModalOpen}) => {
-  const [preferences, setPreferences] = useState<SchedulingPreferences>(initialPreferences);
+  const userPreferences = useSelector(selectPreferences);
+  const dispatch = useDispatch();
+  
+  const [preferences, setPreferences] = useState<SchedulingPreferences>(userPreferences);
   const [repeats, setRepeats] = useState<Repeat>(Repeat.Never);
   const [breakStart, setBreakStart] = useState<Date>(set(new Date(), {hours: 12, minutes: 0}));
   const [breakEnd, setBreakEnd] = useState<Date>(set(new Date(), {hours: 13, minutes: 0}));
   const [breakDate, setBreakDate] = useState<Date>(new Date());
+
   const classes = useStyles();
 
   const updateTypeReferenceNode = (key: string, value : Date | number | null) => {
@@ -105,7 +108,6 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
   } 
 
   const createBreak = () => {
-    console.log(breakDate)
     const breakTime : BreakTime = {
       breakDate,
       repeats,
@@ -113,7 +115,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
       breakEnd
     };
 
-    var breakTimes = preferences.blockedTimes;
+    var breakTimes = [...preferences.blockedTimes];
     breakTimes.push(breakTime);
     setPreferences({...preferences, blockedTimes : breakTimes})
   }
@@ -133,7 +135,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
   }
 
   const deleteBreak = (index: number) => {
-    var breakTimes = preferences.blockedTimes;
+    var breakTimes = [...preferences.blockedTimes];
     breakTimes.splice(index, 1);
     setPreferences({...preferences, blockedTimes: breakTimes})
   }
@@ -164,19 +166,26 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
     )
   }
 
+  const handleClose = () => {
+    setModalOpen(false);
+
+    // Updating users preferences
+    dispatch(preferencesUpdate(preferences));
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Modal
         className={classes.modal}
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => handleClose()}
       >
         <Fade in={modalOpen}>
           <FormControl className={classes.paper}>
             <h3 className={classes.prefHor}>Scheduling Preferences</h3>
             <div className={classes.prefSettings}>
               <KeyboardDatePicker className={classes.prefHor} size="small" variant="inline" label="Start Date" inputVariant="outlined" format={"iiii, do"} value={preferences.startDate} onChange={startDate => updateTypeReferenceNode('startDate', startDate)} />
-              <TextField type="number" className={classes.prefHor} variant="outlined" size="small" label="Task Interval (Minutes)" value={preferences.maxInterval} onChange={event => setPreferences({...preferences, maxInterval: parseInt(event.target.value)})}/>
+              <TextField type="number" className={classes.prefHor} variant="outlined" size="small" label="Task Interval (Hours)" value={preferences.maxInterval} onChange={event => setPreferences({...preferences, maxInterval: parseInt(event.target.value)})}/>
               <div className={classes.dailyTimes}>
                 <KeyboardTimePicker className={classes.prefVert} minutesStep={15} size="small" variant="inline" label="Daily Start Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyStartTime} onChange={startTime => updateTypeReferenceNode('dailyStartTime', startTime)} />
                 <KeyboardTimePicker minutesStep={15} size="small" variant="inline" label="Daily Finish Time" inputVariant="outlined" format={"h:mmaaa"} value={preferences.dailyEndTime} onChange={endTime => updateTypeReferenceNode('dailyEndTime', endTime)}/>
@@ -205,7 +214,7 @@ export const PreferencesModal: FunctionComponent<PreferencesModalProps> = ({moda
               </div>
             </div>
 
-            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px'}} onClick={() => setModalOpen(false)}>Done</Button>
+            <Button variant="contained" color="primary" style={{width: '120px', alignSelf: 'center', marginTop: '10px'}} onClick={() => handleClose()}>Done</Button>
           </FormControl>
         </Fade>
         
