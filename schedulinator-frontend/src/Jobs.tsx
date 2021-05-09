@@ -4,6 +4,9 @@ import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pi
 import { FunctionComponent, useState } from "react";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { format } from 'date-fns';
+import { pickerTheme } from './PickerTheme'
+import { ThemeProvider } from "@material-ui/styles";
+
 
 interface Job {
   name : string,
@@ -138,12 +141,14 @@ export const Jobs: FunctionComponent = () => {
           InputLabelProps={{shrink: true, className: classes.inputLabel}} onChange={(event) => setEstimatedTime(parseInt(event.target.value))}
           value={estimatedTime} className={classes.inputField}
           />
-        <KeyboardDateTimePicker 
-          size="small" variant="inline" label="Deadline" inputVariant="outlined" format="PPPPp"
-          value={deadline} onChange={(date) => date == null ? null : setDeadline(date)} 
-          className={classes.deadlineInputField} clearable InputLabelProps={{shrink: true, className: classes.inputLabel}}
-          multiline
+        <ThemeProvider theme={pickerTheme}> 
+          <KeyboardDateTimePicker 
+            size="small" variant="inline" label="Deadline" inputVariant="outlined" format="PPPPp"
+            value={deadline} onChange={(date) => date == null ? null : setDeadline(date)} 
+            className={classes.deadlineInputField} clearable InputLabelProps={{shrink: true, className: classes.inputLabel}}
+            multiline
           />
+        </ThemeProvider>
           <Button
             variant="contained" color="primary"  onClick={() => addJob()} className={classes.addButton}
             disabled={deadline === null || name === '' || estimatedTime <= 0}> 
